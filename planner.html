@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plan a Date</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="date.css">
+</head>
+<body>
+    <main class="card" aria-label="Date planning options">
+        <div class="sticker-layer" aria-hidden="true"></div>
+        <section class="planner" aria-label="Date planning options">
+            <div class="planner-shell">
+                <p class="planner-eyebrow">GREAT!</p>
+                <h2>Where would you like to go? <span class="emoji" aria-hidden="true">😊</span></h2>
+                <p class="planner-note">
+                    <span class="muted">(My treat, meron ako </span><span class="highlight">moneyyy)</span>
+                </p>
+
+                <label class="planner-select-label" for="destination-select">Choose a place</label>
+                <div class="planner-select-shell">
+                    <select id="destination-select" class="planner-select" aria-label="Choose a destination">
+                        <option value="" selected disabled>Select a place</option>
+                        <option>R&amp;J Seoul Cravings</option>
+                        <option>Chil’s Self Cook Ramyeon</option>
+                        <option>Taco Tambayan</option>
+                        <option>Tteokbokki Place (idk where yet)</option>
+                        <option>Chibox Korean American Chicken</option>
+                        <option>Starbucks</option>
+                        <option>NYORK</option>
+                        <option>Movies</option>
+                        <option>Your Place</option>
+                        <option>Freedom Park</option>
+                        <option>Krispy Kreme (Microsoft Rewards Coupon)</option>
+                        <option>Savory (Microsoft Rewards Coupon)</option>
+                    </select>
+                </div>
+
+                <div class="planner-divider">OR</div>
+                <label class="planner-label" for="destination-input">Your choice</label>
+                <input id="destination-input" class="planner-input" type="text" placeholder="Type here...." autocomplete="off">
+
+                <div class="planner-actions">
+                    <button type="button" class="planner-submit btn-confirm" disabled aria-disabled="true">
+                        <img class="btn-icon" src="Icons/up-arrow.png" alt="" aria-hidden="true">
+                        <span>Confirm</span>
+                    </button>
+
+                    <button type="button" class="planner-back btn-back" onclick="window.location.href='index.html'">
+                        <img class="btn-icon" src="Icons/down-arrow.png" alt="" aria-hidden="true">
+                        <span>Back</span>
+                    </button>
+                </div>
+                <div id="confirm-panel" class="confirm-panel" aria-hidden="true" hidden>
+                    <div class="confirm-shell">
+                        <p class="confirm-title">Saved!</p>
+                        <p class="confirm-text">We'll plan this date: <strong id="confirm-destination"></strong></p>
+                        <div class="confirm-actions">
+                            <button type="button" class="confirm-done">Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="date.js"></script>
+</body>
+</html>

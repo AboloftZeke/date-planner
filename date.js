@@ -4,6 +4,10 @@ const noButton = document.querySelector(".choice.no");
 const plannerPanel = document.querySelector(".planner");
 const destinationSelect = document.querySelector("#destination-select");
 const destinationInput = document.querySelector("#destination-input");
+const plannerSubmit = document.querySelector(".planner-submit");
+const confirmPanel = document.querySelector("#confirm-panel");
+const confirmDestination = document.querySelector("#confirm-destination");
+const confirmDone = document.querySelector(".confirm-done");
 let noButtonHasMoved = false;
 let noButtonEscapeCount = 0;
 
@@ -164,17 +168,44 @@ if (noButton && card) {
 	window.addEventListener("resize", placeNoButton);
 }
 
-if (yesButton && card && plannerPanel) {
-	yesButton.addEventListener("click", () => {
-		plannerPanel.hidden = false;
-		plannerPanel.setAttribute("aria-hidden", "false");
-		window.requestAnimationFrame(() => {
-			card.classList.add("is-planning");
-		});
-		window.setTimeout(() => {
-			destinationInput?.focus();
-		}, 360);
-	});
+// Ensure sticker layer and scheduling on all pages (planner.html may not have the No button)
+ensureStickerLayer();
+shuffleStickerQueue();
+scheduleSticker();
+
+// If this is the planner page, focus the input when loaded
+window.addEventListener("load", () => {
+    destinationInput?.focus();
+	// If planner exists as the main view (standalone page), reveal it
+	try {
+		const plannerExists = document.querySelector('.planner');
+		if (plannerExists && card && !card.classList.contains('is-planning')) {
+			card.classList.add('is-planning');
+		}
+	} catch (e) {
+		// ignore
+	}
+	// Defensive init: ensure confirm panel is hidden and Confirm is disabled until user acts
+	try {
+		if (confirmPanel) {
+			confirmPanel.hidden = true;
+			confirmPanel.setAttribute('aria-hidden', 'true');
+			if (confirmDestination) confirmDestination.textContent = '';
+		}
+		if (plannerSubmit) {
+			plannerSubmit.disabled = true;
+			plannerSubmit.setAttribute('aria-disabled', 'true');
+		}
+	} catch (e) {
+		// ignore
+	}
+});
+
+if (yesButton && card) {
+    yesButton.addEventListener("click", () => {
+        // Navigate to the dedicated planner page
+        window.location.href = "planner.html";
+    });
 }
 
 if (destinationSelect && destinationInput) {
@@ -184,5 +215,56 @@ if (destinationSelect && destinationInput) {
 		}
 
 		destinationInput.value = destinationSelect.value;
+		// enable confirm when a value is chosen
+		if (plannerSubmit) {
+			plannerSubmit.disabled = false;
+			plannerSubmit.setAttribute('aria-disabled', 'false');
+		}
+	});
+}
+
+// enable/disable confirm based on input content
+const toggleConfirmEnabled = () => {
+	if (!plannerSubmit || !destinationInput) return;
+	const val = destinationInput.value?.trim();
+	const enabled = Boolean(val);
+	plannerSubmit.disabled = !enabled;
+	plannerSubmit.setAttribute('aria-disabled', String(!enabled));
+};
+
+if (destinationInput) {
+	destinationInput.addEventListener('input', toggleConfirmEnabled);
+	// initial toggle on load
+	toggleConfirmEnabled();
+}
+
+if (plannerSubmit && destinationInput && confirmPanel && confirmDestination) {
+	plannerSubmit.addEventListener('click', () => {
+		const val = destinationInput.value?.trim();
+		if (!val) {
+			destinationInput.focus();
+			destinationInput.classList.add('invalid');
+			setTimeout(() => destinationInput.classList.remove('invalid'), 600);
+			return;
+		}
+
+		try {
+			localStorage.setItem('plannedDestination', val);
+		} catch (e) {
+			// ignore storage errors
+		}
+
+		confirmDestination.textContent = val;
+		confirmPanel.hidden = false;
+		confirmPanel.setAttribute('aria-hidden', 'false');
+		// spawn a celebratory sticker
+		spawnSticker();
+	});
+}
+
+if (confirmDone) {
+	confirmDone.addEventListener('click', () => {
+		// go back home after confirming
+		window.location.href = 'index.html';
 	});
 }

@@ -236,6 +236,103 @@ body {
 	outline: none;
 }
 
+.confirm-panel {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	z-index: 6;
+}
+
+/* Ensure the hidden attribute actually hides the panel (author styles can override UA defaults) */
+.confirm-panel[hidden] {
+	display: none !important;
+}
+
+.confirm-shell {
+	background: rgba(241, 201, 59, 0.18);
+	padding: 18px 22px;
+	border-radius: 18px;
+	text-align: center;
+	box-shadow: 0 18px 40px rgba(161, 123, 0, 0.12);
+	min-width: 320px;
+}
+
+.confirm-title {
+	margin: 0 0 6px;
+	font-size: 1.6rem;
+	font-weight: 600;
+}
+
+.confirm-text {
+	margin: 0 0 12px;
+	color: var(--text);
+}
+
+.confirm-actions .confirm-done {
+	padding: 8px 16px;
+	border-radius: 10px;
+	border: 0;
+	background: var(--yes);
+	color: #fff;
+	cursor: pointer;
+}
+
+.planner-input.invalid {
+	animation: shake 600ms ease;
+}
+
+@keyframes shake {
+	0% { transform: translateX(0); }
+	20% { transform: translateX(-6px); }
+	40% { transform: translateX(6px); }
+	60% { transform: translateX(-4px); }
+	80% { transform: translateX(4px); }
+	100% { transform: translateX(0); }
+}
+
+/* Button icons and styles */
+.btn-icon {
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 8px;
+}
+
+.btn-confirm {
+	background: var(--yes);
+	color: white;
+	border: 0;
+	padding: 10px 16px;
+	border-radius: 12px;
+	box-shadow: 0 8px 18px rgba(25, 209, 23, 0.12);
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.btn-confirm[disabled], .btn-confirm[aria-disabled="true"] {
+	opacity: 0.52;
+	cursor: not-allowed;
+	filter: grayscale(0.12);
+}
+
+.btn-back {
+	background: var(--button-bg);
+	color: var(--text);
+	border: 1px solid rgba(0,0,0,0.12);
+	padding: 8px 12px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.planner-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	margin-top: 16px;
+}
+
 .planner-input::placeholder {
 	color: rgba(0, 0, 0, 0.42);
 }
