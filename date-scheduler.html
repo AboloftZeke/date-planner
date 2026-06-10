@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="date.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     <main class="card scheduler-card" aria-label="Date scheduler">
@@ -82,6 +83,56 @@
         const receiptSend = document.querySelector('.receipt-send');
         const receiptClose = document.querySelector('.receipt-close');
         const emailAddress = 'reileyangelomuncal@gmail.com';
+        const emailServiceId = 'service_g774trf';
+        const emailTemplateId = 'template_0bs67gf';
+        const emailPublicKey = 'bpgswoSXoC0tK_2XJ';
+        let receiptEmailSent = false;
+        const emailClient = window.emailjs || null;
+
+        if (emailClient) {
+            emailClient.init({ publicKey: emailPublicKey });
+        }
+
+        const sendReceiptEmail = () => {
+            if (receiptEmailSent) {
+                return Promise.resolve();
+            }
+
+            const templateParams = {
+                to_email: emailAddress,
+                place: receiptPlace.textContent,
+                date: receiptDate.textContent,
+                time: receiptTime.textContent,
+                note: receiptNote.textContent,
+                subject: 'Date',
+            };
+
+            if (!emailClient) {
+                const subject = encodeURIComponent('Date Scheduler Receipt');
+                const body = encodeURIComponent([
+                    'Here is the date plan:',
+                    `Place: ${receiptPlace.textContent}`,
+                    `Date: ${receiptDate.textContent}`,
+                    `Time: ${receiptTime.textContent}`,
+                    `Note: ${receiptNote.textContent}`,
+                ].join('\n'));
+
+                window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+                receiptEmailSent = true;
+                receiptSend.textContent = 'Email opened';
+                return Promise.resolve();
+            }
+
+            return emailClient.send(emailServiceId, emailTemplateId, templateParams)
+                .then(() => {
+                    receiptEmailSent = true;
+                    receiptSend.textContent = 'Sent!';
+                    receiptSend.disabled = true;
+                })
+                .catch(() => {
+                    receiptSend.textContent = 'Send to email';
+                });
+        };
 
         try {
             const saved = localStorage.getItem('plannedDestination');
@@ -150,19 +201,14 @@
 
             receiptPanel.hidden = false;
             receiptPanel.setAttribute('aria-hidden', 'false');
+
+            sendReceiptEmail();
         });
 
         receiptSend.addEventListener('click', () => {
-            const subject = encodeURIComponent('Date Scheduler Receipt');
-            const body = encodeURIComponent([
-                'Here is the date plan:',
-                `Place: ${receiptPlace.textContent}`,
-                `Date: ${receiptDate.textContent}`,
-                `Time: ${receiptTime.textContent}`,
-                `Note: ${receiptNote.textContent}`,
-            ].join('\n'));
-
-            window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+            receiptSend.disabled = true;
+            receiptSend.textContent = 'Sending...';
+            sendReceiptEmail();
         });
 
         receiptClose.addEventListener('click', () => {
