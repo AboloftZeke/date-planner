@@ -1,5 +1,9 @@
 const card = document.querySelector(".card");
+const yesButton = document.querySelector(".choice.yes");
 const noButton = document.querySelector(".choice.no");
+const plannerPanel = document.querySelector(".planner");
+const destinationSelect = document.querySelector("#destination-select");
+const destinationInput = document.querySelector("#destination-input");
 let noButtonHasMoved = false;
 let noButtonEscapeCount = 0;
 
@@ -50,10 +54,13 @@ const ensureStickerLayer = () => {
 		return;
 	}
 
-	stickerLayer = document.createElement("div");
-	stickerLayer.className = "sticker-layer";
-	stickerLayer.setAttribute("aria-hidden", "true");
-	card.prepend(stickerLayer);
+	stickerLayer = card.querySelector(".sticker-layer");
+	if (!stickerLayer) {
+		stickerLayer = document.createElement("div");
+		stickerLayer.className = "sticker-layer";
+		stickerLayer.setAttribute("aria-hidden", "true");
+		card.prepend(stickerLayer);
+	}
 };
 
 const spawnSticker = () => {
@@ -155,4 +162,27 @@ if (noButton && card) {
 		noButton.style.setProperty("--no-rotate", "0deg");
 	});
 	window.addEventListener("resize", placeNoButton);
+}
+
+if (yesButton && card && plannerPanel) {
+	yesButton.addEventListener("click", () => {
+		plannerPanel.hidden = false;
+		plannerPanel.setAttribute("aria-hidden", "false");
+		window.requestAnimationFrame(() => {
+			card.classList.add("is-planning");
+		});
+		window.setTimeout(() => {
+			destinationInput?.focus();
+		}, 360);
+	});
+}
+
+if (destinationSelect && destinationInput) {
+	destinationSelect.addEventListener("change", () => {
+		if (!destinationSelect.value) {
+			return;
+		}
+
+		destinationInput.value = destinationSelect.value;
+	});
 }

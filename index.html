@@ -11,12 +11,45 @@
 </head>
 <body>
 	<main class="card" aria-label="Date planner invitation">
+		<div class="sticker-layer" aria-hidden="true"></div>
 		<section class="invite">
 			<h1 class="typing title">Hello Allyson</h1>
 			<p class="typing prompt">Would you like to plan a date with me?</p>
 			<div class="actions" role="group" aria-label="Response options">
 				<button class="choice yes" type="button">Yes</button>
 				<button class="choice no" type="button">No</button>
+			</div>
+		</section>
+		<section class="planner" aria-label="Date planning options" aria-hidden="true" hidden>
+			<div class="planner-shell">
+				<p class="planner-eyebrow">GREAT!</p>
+				<h2>Where would you like to go? <span class="emoji" aria-hidden="true">😊</span></h2>
+				<p class="planner-note">
+					<span class="muted">(My treat, meron ako </span><span class="highlight">moneyyy)</span>
+				</p>
+
+				<label class="planner-select-label" for="destination-select">Choose a place</label>
+				<div class="planner-select-shell">
+					<select id="destination-select" class="planner-select" aria-label="Choose a destination">
+						<option value="" selected disabled>Select a place</option>
+						<option>R&amp;J Seoul Cravings</option>
+						<option>Chil’s Self Cook Ramyeon</option>
+						<option>Taco Tambayan</option>
+						<option>Tteokbokki Place (idk where yet)</option>
+						<option>Chibox Korean American Chicken</option>
+						<option>Starbucks</option>
+						<option>NYORK</option>
+						<option>Movies</option>
+						<option>Your Place</option>
+						<option>Freedom Park</option>
+						<option>Krispy Kreme (Microsoft Rewards Coupon)</option>
+						<option>Savory (Microsoft Rewards Coupon)</option>
+					</select>
+				</div>
+
+				<div class="planner-divider">OR</div>
+				<label class="planner-label" for="destination-input">Your choice</label>
+				<input id="destination-input" class="planner-input" type="text" placeholder="Type here...." autocomplete="off">
 			</div>
 		</section>
 	</main>
