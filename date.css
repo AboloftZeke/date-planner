@@ -173,14 +173,16 @@ body {
 }
 
 .planner-select-shell::after {
-	content: "⌄";
+	content: "";
 	position: absolute;
 	right: 14px;
 	top: 50%;
-	transform: translateY(-58%);
-	font-size: 1.55rem;
+	width: 9px;
+	height: 9px;
+	transform: translateY(-70%) rotate(45deg);
+	border-right: 2px solid #111111;
+	border-bottom: 2px solid #111111;
 	pointer-events: none;
-	color: #111111;
 }
 
 .planner-select {
@@ -860,6 +862,15 @@ body {
 	.planner-select-shell,
 	.planner-input {
 		width: min(100%, 100%);
+	}
+
+	.planner-select {
+		height: 42px;
+		padding-right: 44px;
+	}
+
+	.planner-select-shell::after {
+		right: 16px;
 	}
 }
 
