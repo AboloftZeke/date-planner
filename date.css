@@ -350,8 +350,9 @@ body {
 	z-index: 1;
 	display: grid;
 	place-items: center;
+	align-content: start;
 	height: 100%;
-	padding: 28px 20px;
+	padding: 28px 20px 120px;
 }
 
 .scheduler-shell {
@@ -650,6 +651,10 @@ body {
 }
 
 @media (max-width: 760px) {
+	.scheduler {
+		padding-bottom: calc(148px + env(safe-area-inset-bottom));
+	}
+
 	.scheduler-grid {
 		grid-template-columns: 1fr;
 	}
