@@ -132,12 +132,22 @@ body {
 	transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.choice:hover {
+.choice.no {
+	position: relative;
+	z-index: 2;
+	transform: translate(var(--no-x, 0px), var(--no-y, 0px)) rotate(var(--no-rotate, 0deg));
+	transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.2, 1), box-shadow 0.15s ease;
+	will-change: transform;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.choice:not(.no):hover {
 	transform: translateY(-1px);
 	box-shadow: 0 5px 13px rgba(0, 0, 0, 0.24);
 }
 
-.choice:active {
+.choice:not(.no):active {
 	transform: translateY(1px);
 	box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
 }
@@ -226,5 +236,11 @@ body {
 
 	.choice {
 		transition: none;
+	}
+
+	.choice.no {
+		position: relative;
+		transform: none;
+		will-change: auto;
 	}
 }
