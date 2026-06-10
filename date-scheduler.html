@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Date Scheduler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="date.css">
+</head>
+<body>
+    <main class="card scheduler-card" aria-label="Date scheduler">
+        <div class="sticker-layer" aria-hidden="true"></div>
+        <section class="scheduler">
+            <div class="scheduler-shell">
+                <p class="scheduler-eyebrow">AMAZING, nice choice!</p>
+                <h1 class="scheduler-title">When are you free? <span aria-hidden="true">😊</span></h1>
+
+                <div class="scheduler-selected">
+                    <div class="scheduler-selected-label">Chosen Place</div>
+                    <div id="chosen-place" class="scheduler-selected-value">Loading...</div>
+                </div>
+
+                <div class="scheduler-grid">
+                    <article class="scheduler-panel scheduler-panel-large">
+                        <div class="scheduler-panel-heading">Pick a date</div>
+                        <label class="scheduler-date-label" for="date-picker">Choose the day you are free</label>
+                        <input id="date-picker" class="scheduler-date-picker" type="date" aria-label="Choose a date">
+                        <div class="scheduler-date-help">Tap the field to open the calendar picker.</div>
+                    </article>
+
+                    <article class="scheduler-panel">
+                        <div class="scheduler-panel-heading">Time</div>
+                        <div class="time-pills" role="radiogroup" aria-label="Choose a time of day">
+                            <button type="button" class="time-pill is-selected" data-time="Morning" aria-pressed="true">Morning</button>
+                            <button type="button" class="time-pill" data-time="Afternoon" aria-pressed="false">Afternoon</button>
+                            <button type="button" class="time-pill" data-time="Evening" aria-pressed="false">Evening</button>
+                            <button type="button" class="time-pill" data-time="Weekend" aria-pressed="false">Weekend</button>
+                        </div>
+                        <label class="scheduler-mini-label" for="time-note">Add a note</label>
+                        <input id="time-note" class="scheduler-mini-input" type="text" placeholder="Anything I should know?">
+                    </article>
+                </div>
+
+                <div class="scheduler-actions">
+                    <button type="button" class="scheduler-confirm">Confirm schedule</button>
+                    <button type="button" class="scheduler-back" onclick="window.location.href='planner.html'">Back</button>
+                </div>
+
+                <div id="receipt-panel" class="receipt-panel" hidden aria-hidden="true">
+                    <div class="receipt-card">
+                        <p class="receipt-eyebrow">RECEIPT</p>
+                        <h2 class="receipt-title">Your date is locked in</h2>
+                        <div class="receipt-line"><span>Place</span><strong id="receipt-place">-</strong></div>
+                        <div class="receipt-line"><span>Date</span><strong id="receipt-date">-</strong></div>
+                        <div class="receipt-line"><span>Time</span><strong id="receipt-time">-</strong></div>
+                        <div class="receipt-line receipt-note-line"><span>Note</span><strong id="receipt-note">None</strong></div>
+
+                        <div class="receipt-actions">
+                            <button type="button" class="receipt-send">Send to email</button>
+                            <button type="button" class="receipt-close">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="date.js"></script>
+    <script>
+        const chosenPlace = document.getElementById('chosen-place');
+        const schedulerConfirm = document.querySelector('.scheduler-confirm');
+        const datePicker = document.getElementById('date-picker');
+        const timePills = Array.from(document.querySelectorAll('.time-pill'));
+        const timeNote = document.getElementById('time-note');
+        const receiptPanel = document.getElementById('receipt-panel');
+        const receiptPlace = document.getElementById('receipt-place');
+        const receiptDate = document.getElementById('receipt-date');
+        const receiptTime = document.getElementById('receipt-time');
+        const receiptNote = document.getElementById('receipt-note');
+        const receiptSend = document.querySelector('.receipt-send');
+        const receiptClose = document.querySelector('.receipt-close');
+        const emailAddress = 'reileyangelomuncal@gmail.com';
+
+        try {
+            const saved = localStorage.getItem('plannedDestination');
+            chosenPlace.textContent = saved || 'Choose a place first';
+        } catch (error) {
+            chosenPlace.textContent = 'Choose a place first';
+        }
+
+        window.datePlannerSpawnSticker?.();
+
+        const today = new Date();
+        const toIsoDate = (date) => date.toISOString().slice(0, 10);
+        const nextAllowedDate = new Date(today);
+        nextAllowedDate.setDate(nextAllowedDate.getDate() + 1);
+        datePicker.min = toIsoDate(nextAllowedDate);
+        datePicker.value = toIsoDate(nextAllowedDate);
+
+        let activeTime = 'Morning';
+
+        const syncTime = (timeValue) => {
+            activeTime = timeValue;
+            timePills.forEach((pill) => {
+                const isSelected = pill.dataset.time === timeValue;
+                pill.classList.toggle('is-selected', isSelected);
+                pill.setAttribute('aria-pressed', String(isSelected));
+            });
+
+            try {
+                localStorage.setItem('plannedTime', timeValue);
+            } catch (error) {
+                // ignore storage failures
+            }
+        };
+
+        timePills.forEach((pill) => {
+            pill.addEventListener('click', () => syncTime(pill.dataset.time || 'Morning'));
+        });
+
+        try {
+            const savedTime = localStorage.getItem('plannedTime');
+            if (savedTime) {
+                syncTime(savedTime);
+            }
+        } catch (error) {
+            syncTime('Morning');
+        }
+
+        schedulerConfirm.addEventListener('click', () => {
+            if (!datePicker.value) {
+                datePicker.focus();
+                return;
+            }
+
+            try {
+                localStorage.setItem('plannedDate', datePicker.value);
+                localStorage.setItem('plannedTime', activeTime);
+                localStorage.setItem('plannedNote', timeNote.value.trim());
+            } catch (error) {
+                // ignore storage failures
+            }
+
+            receiptPlace.textContent = chosenPlace.textContent;
+            receiptDate.textContent = datePicker.value;
+            receiptTime.textContent = activeTime;
+            receiptNote.textContent = timeNote.value.trim() || 'None';
+
+            receiptPanel.hidden = false;
+            receiptPanel.setAttribute('aria-hidden', 'false');
+        });
+
+        receiptSend.addEventListener('click', () => {
+            const subject = encodeURIComponent('Date Scheduler Receipt');
+            const body = encodeURIComponent([
+                'Here is the date plan:',
+                `Place: ${receiptPlace.textContent}`,
+                `Date: ${receiptDate.textContent}`,
+                `Time: ${receiptTime.textContent}`,
+                `Note: ${receiptNote.textContent}`,
+            ].join('\n'));
+
+            window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+        });
+
+        receiptClose.addEventListener('click', () => {
+            receiptPanel.hidden = true;
+            receiptPanel.setAttribute('aria-hidden', 'true');
+        });
+    </script>
+</body>
+</html>

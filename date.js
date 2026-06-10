@@ -5,9 +5,6 @@ const plannerPanel = document.querySelector(".planner");
 const destinationSelect = document.querySelector("#destination-select");
 const destinationInput = document.querySelector("#destination-input");
 const plannerSubmit = document.querySelector(".planner-submit");
-const confirmPanel = document.querySelector("#confirm-panel");
-const confirmDestination = document.querySelector("#confirm-destination");
-const confirmDone = document.querySelector(".confirm-done");
 let noButtonHasMoved = false;
 let noButtonEscapeCount = 0;
 
@@ -100,6 +97,8 @@ const spawnSticker = () => {
 	});
 };
 
+window.datePlannerSpawnSticker = spawnSticker;
+
 const scheduleSticker = () => {
 	if (prefersReducedMotion.matches) {
 		return;
@@ -185,13 +184,8 @@ window.addEventListener("load", () => {
 	} catch (e) {
 		// ignore
 	}
-	// Defensive init: ensure confirm panel is hidden and Confirm is disabled until user acts
+	// Defensive init: Confirm starts disabled until user acts
 	try {
-		if (confirmPanel) {
-			confirmPanel.hidden = true;
-			confirmPanel.setAttribute('aria-hidden', 'true');
-			if (confirmDestination) confirmDestination.textContent = '';
-		}
 		if (plannerSubmit) {
 			plannerSubmit.disabled = true;
 			plannerSubmit.setAttribute('aria-disabled', 'true');
@@ -238,7 +232,7 @@ if (destinationInput) {
 	toggleConfirmEnabled();
 }
 
-if (plannerSubmit && destinationInput && confirmPanel && confirmDestination) {
+if (plannerSubmit && destinationInput) {
 	plannerSubmit.addEventListener('click', () => {
 		const val = destinationInput.value?.trim();
 		if (!val) {
@@ -254,17 +248,6 @@ if (plannerSubmit && destinationInput && confirmPanel && confirmDestination) {
 			// ignore storage errors
 		}
 
-		confirmDestination.textContent = val;
-		confirmPanel.hidden = false;
-		confirmPanel.setAttribute('aria-hidden', 'false');
-		// spawn a celebratory sticker
-		spawnSticker();
-	});
-}
-
-if (confirmDone) {
-	confirmDone.addEventListener('click', () => {
-		// go back home after confirming
-		window.location.href = 'index.html';
+		window.location.href = 'date-scheduler.html';
 	});
 }
