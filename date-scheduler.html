@@ -202,7 +202,9 @@
             receiptPanel.hidden = false;
             receiptPanel.setAttribute('aria-hidden', 'false');
 
-            sendReceiptEmail();
+            receiptSend.disabled = false;
+            receiptSend.textContent = 'Send to email';
+            receiptEmailSent = false;
         });
 
         receiptSend.addEventListener('click', () => {
