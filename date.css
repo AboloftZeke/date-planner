@@ -36,6 +36,34 @@ body {
 	box-shadow: none;
 }
 
+.sticker-layer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	overflow: hidden;
+	z-index: 0;
+}
+
+.sticker {
+	position: absolute;
+	top: -16vh;
+	left: var(--sticker-left, 0px);
+	width: var(--sticker-size, 72px);
+	transform: translate3d(0, 0, 0) rotate(var(--sticker-rotate-start, 0deg));
+	animation: stickerFall var(--sticker-duration, 10s) linear forwards;
+	will-change: transform, opacity;
+	filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.12));
+}
+
+.sticker img {
+	display: block;
+	width: 100%;
+	height: auto;
+	user-select: none;
+	-webkit-user-drag: none;
+	pointer-events: none;
+}
+
 .card::before,
 .card::after {
 	content: "";
@@ -208,6 +236,43 @@ body {
 	}
 }
 
+@keyframes stickerFall {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, 0, 0) rotate(var(--sticker-rotate-start, 0deg));
+	}
+
+	10% {
+		opacity: 1;
+	}
+
+	25% {
+		transform: translate3d(calc(var(--sticker-sway, 0px) * 0.45), 26vh, 0)
+			rotate(calc(var(--sticker-rotate-start, 0deg) + 10deg));
+	}
+
+	40% {
+		transform: translate3d(calc(var(--sticker-sway, 0px) * -0.35), 44vh, 0)
+			rotate(calc(var(--sticker-rotate-start, 0deg) - 8deg));
+	}
+
+	58% {
+		transform: translate3d(calc(var(--sticker-sway, 0px) * 0.55), 63vh, 0)
+			rotate(calc(var(--sticker-rotate-start, 0deg) + 14deg));
+	}
+
+	75% {
+		transform: translate3d(calc(var(--sticker-sway, 0px) * -0.25), 84vh, 0)
+			rotate(calc(var(--sticker-rotate-start, 0deg) - 10deg));
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(calc(var(--sticker-sway, 0px) * 0.15), 118vh, 0)
+			rotate(calc(var(--sticker-rotate-start, 0deg) + 18deg));
+	}
+}
+
 @media (max-width: 640px) {
 	.actions {
 		gap: 24px;
@@ -242,5 +307,10 @@ body {
 		position: relative;
 		transform: none;
 		will-change: auto;
+	}
+
+	.sticker-layer,
+	.sticker {
+		display: none;
 	}
 }
