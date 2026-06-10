@@ -15,7 +15,10 @@
 
 html,
 body {
-	height: 100%;
+	height: auto;
+	min-height: 100%;
+	overflow-x: hidden;
+	overscroll-behavior-y: auto;
 }
 
 body {
@@ -27,6 +30,7 @@ body {
 	overflow-x: hidden;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
+	touch-action: pan-y;
 }
 
 .card {
@@ -351,7 +355,8 @@ body {
 	display: grid;
 	place-items: center;
 	align-content: start;
-	height: 100%;
+	min-height: 100dvh;
+	height: auto;
 	padding: 28px 20px 120px;
 }
 
@@ -652,7 +657,7 @@ body {
 
 @media (max-width: 760px) {
 	.scheduler {
-		padding-bottom: calc(148px + env(safe-area-inset-bottom));
+		padding-bottom: calc(260px + env(safe-area-inset-bottom));
 	}
 
 	.scheduler-grid {
