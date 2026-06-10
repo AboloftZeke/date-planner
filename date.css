@@ -1,0 +1,130 @@
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--page-bg: #f5f3ef;
+	--card-bg: #f1c93b;
+	--text: #111111;
+	--muted: #d9d2c6;
+	--yes: #39d12f;
+	--no: #ff2a2a;
+	--button-bg: #f6f4ee;
+	--button-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: "Poppins", sans-serif;
+	background: var(--page-bg);
+	color: var(--text);
+	display: grid;
+	place-items: center;
+	padding: 18px;
+}
+
+.card {
+	width: min(100%, 880px);
+	height: min(100vh - 36px, 520px);
+	background: var(--card-bg);
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.frame-label {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 400;
+	color: var(--muted);
+	letter-spacing: 0.01em;
+}
+
+.invite {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 56px 24px 44px;
+}
+
+.invite h1 {
+	margin: 0;
+	font-family: "Great Vibes", cursive;
+	font-size: clamp(3.1rem, 5vw, 5rem);
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0.01em;
+}
+
+.prompt {
+	margin: 20px 0 0;
+	font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+	font-weight: 400;
+	line-height: 1.45;
+}
+
+.actions {
+	display: flex;
+	gap: 62px;
+	margin-top: 90px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.choice {
+	min-width: 96px;
+	padding: 10px 24px;
+	border: 0;
+	border-radius: 16px;
+	background: var(--button-bg);
+	box-shadow: var(--button-shadow);
+	font: inherit;
+	font-size: 1.05rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.choice:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 5px 13px rgba(0, 0, 0, 0.24);
+}
+
+.choice:active {
+	transform: translateY(1px);
+	box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+}
+
+.yes {
+	color: var(--yes);
+}
+
+.no {
+	color: var(--no);
+}
+
+@media (max-width: 640px) {
+	.card {
+		height: calc(100vh - 36px);
+	}
+
+	.actions {
+		gap: 24px;
+		margin-top: 64px;
+	}
+
+	.choice {
+		min-width: 92px;
+	}
+}
